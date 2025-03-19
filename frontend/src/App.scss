@@ -1,0 +1,58 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+}
+
+body {
+  background-color: #171717;
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .entities-list-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+
+    .entity {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background-color: salmon;
+      border-radius: 8px;
+      padding: 5px;
+      width: 200px;
+
+      span {
+        background-color: mintcream;
+        padding: 2px;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .entity-modal {
+    border-radius: 8px;
+    padding: 10px;
+    background-color: salmon;
+
+    .close-button {
+      width: 20px;
+      height: 20px;
+      background-color: transparent;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+  }
+}
