@@ -1,1 +1,3 @@
 node_modules
+./backend/src/data/pokemons.json
+./backend/src/services/dbService.ts

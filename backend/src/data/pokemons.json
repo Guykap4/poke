@@ -1,1 +1,80 @@
-[{"name":"bulbasaur","abilities":[{"name":"overgrow","isHidden":false},{"name":"chlorophyll","isHidden":true}],"sprites":{"backDefault":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png","frontDefault":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"},"evolutionDetails":[],"pokeId":1,"isFavorite":false},{"name":"ivysaur","abilities":[{"name":"overgrow","isHidden":false},{"name":"chlorophyll","isHidden":true}],"sprites":{"backDefault":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/2.png","frontDefault":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"},"evolutionDetails":[],"pokeId":2,"isFavorite":false},{"name":"venusaur","abilities":[{"name":"overgrow","isHidden":false},{"name":"chlorophyll","isHidden":true}],"sprites":{"backDefault":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/3.png","frontDefault":"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png"},"evolutionDetails":[],"pokeId":3,"isFavorite":false}]
+[
+  {
+    "name": "bulbasaur",
+    "abilities": [
+      {
+        "name": "overgrow",
+        "isHidden": false
+      },
+      {
+        "name": "chlorophyll",
+        "isHidden": true
+      }
+    ],
+    "sprites": {
+      "backDefault": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png",
+      "frontDefault": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"
+    },
+    "evolutionDetails": [
+      [
+        {
+          "id": 1,
+          "name": "bulbasaur"
+        }
+      ],
+      [
+        {
+          "id": 2,
+          "name": "ivysaur"
+        }
+      ],
+      [
+        {
+          "id": 3,
+          "name": "venusaur"
+        }
+      ]
+    ],
+    "pokeId": 1,
+    "isFavorite": false
+  },
+  {
+    "name": "ivysaur",
+    "abilities": [
+      {
+        "name": "overgrow",
+        "isHidden": false
+      },
+      {
+        "name": "chlorophyll",
+        "isHidden": true
+      }
+    ],
+    "sprites": {
+      "backDefault": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/2.png",
+      "frontDefault": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"
+    },
+    "evolutionDetails": [
+      [
+        {
+          "id": 1,
+          "name": "bulbasaur"
+        }
+      ],
+      [
+        {
+          "id": 2,
+          "name": "ivysaur"
+        }
+      ],
+      [
+        {
+          "id": 3,
+          "name": "venusaur"
+        }
+      ]
+    ],
+    "pokeId": 2,
+    "isFavorite": false
+  }
+]

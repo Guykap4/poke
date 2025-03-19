@@ -2,7 +2,7 @@ export interface ParsedPokemon {
 	name: string
 	abilities: Ability[]
 	sprites: Sprites
-	evolutionDetails: []
+	evolutionDetails: EvolutionChainLink[][]
 	isFavorite: boolean
 	pokeId: number
 }
@@ -15,4 +15,9 @@ interface Ability {
 interface Sprites {
 	backDefault: string
 	frontDefault: string
+}
+
+export interface EvolutionChainLink {
+	id: number
+	name: string
 }
