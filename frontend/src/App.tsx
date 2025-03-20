@@ -9,6 +9,7 @@ import {AppHeader} from './components/AppHeader.tsx';
 import {FilterValues} from '../../shared/FilterValues';
 import {PokeLoader} from './components/PokeLoader.tsx';
 import {useDebouncedCallback} from 'use-debounce';
+import {Error} from './components/Error.tsx';
 
 function App() {
 
@@ -16,6 +17,9 @@ function App() {
 	const [chosenPokemon, setChosenPokemon] = useState<ParsedPokemon | null>(null);
 	const [filterValues, setFilterValues] = useState<FilterValues>({isFavorite: false, name: ''});
 
+	/**
+	 * using react query client for silent query and retries
+	 */
 	const queryClient = useQueryClient();
 	const {isPending, error, data: pokemons} = useQuery({
 		queryKey: ['pokemons'],
@@ -33,13 +37,16 @@ function App() {
 		},
 	});
 
+	/**
+	 * changing sprite back and forth
+	 */
 	useEffect(() => {
-		// const intervalId = setInterval(() => {
-		// 	setIsFrontShown(prevState => !prevState);
-		// }, 10000)
-		// return () => {
-		// 	clearTimeout(intervalId);
-		// }
+		const intervalId = setInterval(() => {
+			setIsFrontShown(prevState => !prevState);
+		}, 10000)
+		return () => {
+			clearTimeout(intervalId);
+		}
 	}, []);
 
 	useEffect(() => {
@@ -67,7 +74,7 @@ function App() {
 		<div className="app">
 			<AppHeader isShowFavs={filterValues.isFavorite} setIsShowFavs={toggleShowFavs} onFilterChange={onFilterChange}/>
 			{isPending && <PokeLoader/>}
-			{error && <div>Something went wrong</div>}
+			{error && <Error/>}
 			{pokemons &&
                 <>
                     <PokemonList onClickCard={setChosenPokemon} isFrontShown={isFrontShown} pokemons={pokemons}/>

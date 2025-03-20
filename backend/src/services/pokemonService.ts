@@ -7,6 +7,10 @@ import {FilterValues} from '../../../shared/FilterValues';
 const POKEMON_DATA_PATH = 'src/data/pokemons.json'
 const POKEMONS_API = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
 
+/** basic query with filter for pokemons, including repopulating in case we have none
+ * @param filterValues
+ */
+
 async function queryPokemons(filterValues?:FilterValues):Promise<ParsedPokemon[]> {
 	let pokemons:ParsedPokemon[] = JSON.parse(fs.readFileSync(POKEMON_DATA_PATH, {encoding: 'utf8', flag: 'r'}));
 	if (!pokemons || !pokemons.length) {
@@ -35,6 +39,9 @@ function filterPokemons(pokemons:ParsedPokemon[],{isFavorite,name}:FilterValues)
 	})
 }
 
+/**
+ * getting all relevant data from number of APIs
+ */
 async function populatePokemons() {
 	const basePokemons:NamedAPIResource[] = await axios.get(POKEMONS_API).then(res => res.data.results);
 	const pokemonsPromises = basePokemons.map(({url}) => {
@@ -50,6 +57,10 @@ async function populatePokemons() {
 	writePokemonsToJson(parsedPokemons);
 }
 
+/**
+ * return a parsed pokemon to work with
+ * @param pokemon
+ */
 function parsePokemon(pokemon:Pokemon):ParsedPokemon {
 	return {
 		name: pokemon.name,
@@ -76,6 +87,11 @@ async function getPokemonsEvolutionLine(pokemons:Pokemon[]) {
 	return parsedEvos
 }
 
+/**
+ * recursively adding all the evolution stages, including multi line evolutions
+ * @param chain
+ * @param currChain
+ */
 function pushChainLink(chain:ChainLink[], currChain:EvolutionChainLink[][] = []) {
 	const currLink:EvolutionChainLink[] = chain.map(chainLink => {
 		const currPoke = getCurrentPoke(chainLink)

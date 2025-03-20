@@ -187,6 +187,15 @@ body {
     }
   }
 
+  .error-segment {
+    margin: 30px;
+
+    span {
+      font-size: 20px;
+      color: white;
+    }
+  }
+
   .fire {background-color: #e62829}
   .water {background-color: #2980ef}
   .grass{background-color: #3FA129}
