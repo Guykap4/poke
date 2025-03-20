@@ -12,8 +12,8 @@ async function queryPokemons(filterValues?:FilterValues):Promise<ParsedPokemon[]
 	if (!pokemons || !pokemons.length) {
 		await populatePokemons();
 	}
-	if (filterValues?.isFavorite) {
-		pokemons = pokemons.filter(poke => poke.isFavorite)
+	if (filterValues) {
+		pokemons = filterPokemons(pokemons, filterValues);
 	}
 	return pokemons
 }
@@ -25,6 +25,14 @@ async function setPokemonFavorite(isFavorite:boolean, pokeId:number) {
 	})
 	writePokemonsToJson(patchedPokemons);
 	return;
+}
+
+function filterPokemons(pokemons:ParsedPokemon[],{isFavorite,name}:FilterValues):ParsedPokemon[] {
+	return pokemons.filter(poke => {
+		if (isFavorite && !poke.isFavorite) return false
+		if (name && !poke.name.includes(name)) return false
+		return true
+	})
 }
 
 async function populatePokemons() {

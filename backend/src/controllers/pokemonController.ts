@@ -6,7 +6,8 @@ import {FilterValues} from '../../../shared/FilterValues';
 async function getPokemons(req: Request, res: Response, next:NextFunction) {
 	try {
 		const filterValues:FilterValues = {
-			isFavorite: req.query.isFavorite === 'true'
+			isFavorite: req.query.isFavorite === 'true',
+			name: `${req.query.name}` || ''
 		}
 		const pokemons = await pokemonService.queryPokemons(filterValues);
 		res.send(pokemons)

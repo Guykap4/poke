@@ -8,12 +8,13 @@ import {FullPokemonCard} from './components/FullPokemonCard.tsx';
 import {AppHeader} from './components/AppHeader.tsx';
 import {FilterValues} from '../../shared/FilterValues';
 import {PokeLoader} from './components/PokeLoader.tsx';
+import {useDebouncedCallback} from 'use-debounce';
 
 function App() {
 
 	const [isFrontShown, setIsFrontShown] = useState(true);
 	const [chosenPokemon, setChosenPokemon] = useState<ParsedPokemon | null>(null);
-	const [filterValues, setFilterValues] = useState<FilterValues>({isFavorite: false});
+	const [filterValues, setFilterValues] = useState<FilterValues>({isFavorite: false, name: ''});
 
 	const queryClient = useQueryClient();
 	const {isPending, error, data: pokemons} = useQuery({
@@ -33,30 +34,38 @@ function App() {
 	});
 
 	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setIsFrontShown(prevState => !prevState);
-		}, 10000)
-		return () => {
-			clearTimeout(intervalId);
-		}
+		// const intervalId = setInterval(() => {
+		// 	setIsFrontShown(prevState => !prevState);
+		// }, 10000)
+		// return () => {
+		// 	clearTimeout(intervalId);
+		// }
 	}, []);
 
 	useEffect(() => {
-		queryClient.invalidateQueries({queryKey: ['pokemons']});
+		debouncedRefetch();
 	}, [filterValues]);
+
+	const debouncedRefetch = useDebouncedCallback(() => {
+		queryClient.invalidateQueries({queryKey: ['pokemons']});
+	}, 500, {maxWait: 1500});
 
 	const setPokemonFavorite = ({isFavorite, pokeId}:Partial<ParsedPokemon>) => {
 		mutation.mutate({isFavorite, pokeId});
 	};
 
 	const toggleShowFavs = () => {
-		setFilterValues(prevState => ({...prevState, isFavorite: !prevState.isFavorite}));
+		setFilterValues(filterValue => ({...filterValue, isFavorite: !filterValue.isFavorite}));
 	};
+
+	const onFilterChange = (name:string, value:string) => {
+		setFilterValues(filterValue => ({...filterValue, [name]: value}))
+	}
 
 
 	return (
 		<div className="app">
-			<AppHeader isShowFavs={filterValues.isFavorite} setIsShowFavs={toggleShowFavs}/>
+			<AppHeader isShowFavs={filterValues.isFavorite} setIsShowFavs={toggleShowFavs} onFilterChange={onFilterChange}/>
 			{isPending && <PokeLoader/>}
 			{error && <div>Something went wrong</div>}
 			{pokemons &&

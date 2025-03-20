@@ -26,11 +26,21 @@ body {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 150px;
+      width: 400px;
+
+      span {
+        width: 110px;
+      }
 
       .favorite-btn {
         width: 30px;
         height: 30px;
+      }
+
+      input {
+        border: none;
+        padding: 5px;
+        border-radius: 8px;
       }
     }
   }
