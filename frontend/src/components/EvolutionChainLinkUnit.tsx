@@ -30,7 +30,7 @@ export function EvolutionChainLinkUnit({chainLink, index}:Props) {
 	}
 
 	return (
-		<div className="chain-link">
+		<div className={`chain-link ${chainLink.length > 2 ? 'long' : ''}`}>
 			{chainLink.map(link => (
 				<div key={link.name} className='link-unit'>
 					{isNotFirstChainLink(index) && <div className="evo-arrow">

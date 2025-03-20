@@ -8,7 +8,7 @@ interface Props {
 export function AppHeader({isShowFavs, setIsShowFavs}:Props) {
 
 	return (
-		<div className="app-header">
+		<div className="app-header flying">
 			<span>Poke API</span>
 			<div className="fav-filter">
 				<span>{isShowFavs ? 'Show All' : 'Show Favorites'}</span>

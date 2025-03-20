@@ -19,7 +19,6 @@ body {
     display: flex;
     align-items: center;
     height: 50px;
-    background-color: salmon;
     width: 100%;
     gap: 30px;
 
@@ -138,7 +137,14 @@ body {
           flex-direction: column;
           justify-content: center;
           flex-wrap: wrap;
-          //max-height: 150px;
+
+          &.long {
+            max-height: 160px;
+            overflow: hidden;
+            overflow-y: scroll;
+            flex-wrap: nowrap;
+            justify-content: unset;
+          }
 
           .link-unit {
             display: flex;
