@@ -1,7 +1,6 @@
 import express = require('express');
 import cors = require('cors');
 import dotenv = require('dotenv');
-import {entityRoutes} from './routes/entityRoutes';
 import {pokemonRoutes} from './routes/pokemonRoutes';
 
 
@@ -17,7 +16,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use('/api/entity', entityRoutes);
 app.use('/api/pokemon', pokemonRoutes)
 
 app.listen(PORT, () => {
