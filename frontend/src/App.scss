@@ -14,45 +14,180 @@ body {
   align-items: center;
   flex-direction: column;
 
-  .entities-list-container {
+  .app-header {
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    background-color: salmon;
+    width: 100%;
+    gap: 30px;
+
+    .fav-filter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 150px;
+
+      .favorite-btn {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+
+  .pokemon-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
     padding: 10px;
 
-    .entity {
+    .pokemon-card {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 5px;
-      background-color: salmon;
+      background-color: #a7c2d5;
       border-radius: 8px;
+      border: 5px solid #d0d0d0;
       padding: 5px;
       width: 200px;
+      cursor: pointer;
 
-      span {
-        background-color: mintcream;
-        padding: 2px;
-        border-radius: 4px;
+      .favorite-btn {
+        width: 20px;
+        height: 20px;
+        align-self: flex-end;
+        cursor: default;
       }
     }
   }
 
-  .entity-modal {
-    border-radius: 8px;
-    padding: 10px;
-    background-color: salmon;
+  .modal-dark-bg {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0 0 0 / 55%);
 
-    .close-button {
-      width: 20px;
-      height: 20px;
-      background-color: transparent;
-    }
-
-    form {
+    .full-pokemon-card {
+      position: absolute;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      width: 400px;
+      height: 600px;
+      top: calc(50vh - 300px);
+      left: calc(50vw - 200px);
+      background-color: #3451e9;
+      border: 10px solid #d0d0d0;
+      border-radius: 8px;
+      padding: 10px;
+      gap: 10px;
+
+      .favorite-btn {
+        position: absolute;
+        right: 10px;
+        top: 5px;
+        width: 30px;
+      }
+
+      .img-container {
+        border-radius: 8px;
+        border: black 5px solid;
+        height: 250px;
+        display: flex;
+        justify-content: center;
+        background-color: #d8daff;
+
+        img {
+          height: 100%;
+          width: 250px;
+        }
+      }
+
+      span {
+        font-family: Arial, monospace;
+        font-size: 16px;
+        color: #eaeaea;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        text-transform: capitalize;
+      }
+
+      .types {
+        display: flex;
+        gap: 5px;
+
+        span {
+          padding: 5px 10px;
+          border-radius: 20px;
+        }
+      }
+
+      .ability:not(:last-child) {
+        &::after {
+          content: ', ';
+        }
+      }
+
+      .evolution-line {
+        display: flex;
+        justify-content: center;
+
+        .chain-link {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          flex-wrap: wrap;
+          //max-height: 150px;
+
+          .link-unit {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .evo-arrow {
+              width: 30px;
+              height: 30px;
+
+              img {
+                width: 100%;
+              }
+            }
+
+            .link-poke {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              flex-direction: column;
+
+              img {
+                width: 60px;
+                height: 60px;
+              }
+            }
+          }
+        }
+      }
     }
   }
+
+  .fire {background-color: #e62829}
+  .water {background-color: #2980ef}
+  .grass{background-color: #3FA129}
+  .flying{background-color: #81B9EF}
+  .poison{background-color: #9141cb}
+  .fighting{background-color: #ff8000}
+  .dark{background-color: #624D4E}
+  .steel{background-color: #60a1b8}
+  .ice{background-color: #3DCEF3}
+  .psychic{background-color: #EF4179}
+  .ground{background-color: #915121}
+  .rock{background-color: #afa981}
+  .bug{background-color: #91a119}
+  .ghost{background-color: #704170}
+  .fairy{background-color: #EF70EF}
+  .dragon{background-color: #5060E1}
+  .electric{background-color: #FAC000}
+  .normal{background-color: #9FA19F}
+
 }

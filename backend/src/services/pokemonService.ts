@@ -2,16 +2,29 @@ import * as fs from 'node:fs';
 import axios from 'axios';
 import {ChainLink, EvolutionChain, NamedAPIResource, Pokemon, PokemonSpecies} from 'pokeapi-types';
 import {EvolutionChainLink, ParsedPokemon} from '../../../shared/ParsedPokemon';
+import {FilterValues} from '../../../shared/FilterValues';
 
 const POKEMON_DATA_PATH = 'src/data/pokemons.json'
-const POKEMONS_API = 'https://pokeapi.co/api/v2/pokemon/?limit=2';
+const POKEMONS_API = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
 
-async function queryPokemons():Promise<ParsedPokemon[]> {
-	const pokemons:ParsedPokemon[] = JSON.parse(fs.readFileSync(POKEMON_DATA_PATH, {encoding: 'utf8', flag: 'r'}));
-	if (!pokemons || pokemons.length) {
+async function queryPokemons(filterValues?:FilterValues):Promise<ParsedPokemon[]> {
+	let pokemons:ParsedPokemon[] = JSON.parse(fs.readFileSync(POKEMON_DATA_PATH, {encoding: 'utf8', flag: 'r'}));
+	if (!pokemons || !pokemons.length) {
 		await populatePokemons();
 	}
+	if (filterValues?.isFavorite) {
+		pokemons = pokemons.filter(poke => poke.isFavorite)
+	}
 	return pokemons
+}
+
+async function setPokemonFavorite(isFavorite:boolean, pokeId:number) {
+	const pokemons = await queryPokemons();
+	const patchedPokemons = pokemons.map(pokemon => {
+		return pokemon.pokeId === pokeId ? {...pokemon, isFavorite} : pokemon;
+	})
+	writePokemonsToJson(patchedPokemons);
+	return;
 }
 
 async function populatePokemons() {
@@ -40,6 +53,7 @@ function parsePokemon(pokemon:Pokemon):ParsedPokemon {
 		evolutionDetails:[],
 		pokeId: pokemon.id,
 		isFavorite: false,
+		types: pokemon.types.map(typeInfo => typeInfo.type.name)
 	}
 }
 
@@ -67,8 +81,8 @@ function pushChainLink(chain:ChainLink[], currChain:EvolutionChainLink[][] = [])
 }
 
 function extractPokeIdFromUrl(url:string) {
-	const index = url.indexOf('species/')
-	return url.substring(index+8, index +9);
+	const urlSegments = url.split('/')
+	return urlSegments[urlSegments.length - 2];
 }
 
 function getCurrentPoke(chainLink:ChainLink):EvolutionChainLink {
@@ -93,5 +107,6 @@ function writePokemonsToJson(pokemons:ParsedPokemon[]) {
 }
 
 export const pokemonService = {
-	queryPokemons
+	queryPokemons,
+	setPokemonFavorite
 }

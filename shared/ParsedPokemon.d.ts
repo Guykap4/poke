@@ -1,5 +1,6 @@
 export interface ParsedPokemon {
 	name: string
+	types: string[]
 	abilities: Ability[]
 	sprites: Sprites
 	evolutionDetails: EvolutionChainLink[][]

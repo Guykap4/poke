@@ -1,62 +1,66 @@
 import './App.scss';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {pokemonService} from './services/pokemonService.ts';
+import {ParsedPokemon} from '../../shared/ParsedPokemon';
+import {PokemonList} from './components/PokemonList.tsx';
 import {useEffect, useState} from 'react';
-import {Entity} from './types/entity';
-import {entityService} from './services/entityService.ts';
-import {EntitiesList} from './components/EntitiesList.tsx';
-import {EntityModal} from './components/EntityModal.tsx';
+import {FullPokemonCard} from './components/FullPokemonCard.tsx';
+import {AppHeader} from './components/AppHeader.tsx';
+import {FilterValues} from '../../shared/FilterValues';
 
 function App() {
 
-	const [entities, setEntities] = useState<Entity[]>([]);
-	const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+	const queryClient = useQueryClient();
+	const {isPending, error, data: pokemons} = useQuery({
+		queryKey: ['pokemons'],
+		queryFn: () =>
+			pokemonService.getPokemons(filterValues),
+	});
+
+	const mutation = useMutation({
+		mutationFn: pokemonService.setPokemonFavorite,
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({queryKey: ['pokemons']});
+			setChosenPokemon(prevPoke => {
+				return prevPoke ? {...prevPoke, isFavorite: !prevPoke.isFavorite} : null
+			})
+		},
+	});
+
+	const setPokemonFavorite = ({isFavorite, pokeId}:Partial<ParsedPokemon>) => {
+		mutation.mutate({isFavorite, pokeId})
+	}
+
+	const [isFrontShown, setIsFrontShown] = useState(true);
+	const [chosenPokemon, setChosenPokemon] = useState<ParsedPokemon | null>(null);
+	const [filterValues, setFilterValues] = useState<FilterValues>({isFavorite: false});
+
+	const toggleShowFavs = () => {
+		setFilterValues(prevState => ({...prevState, isFavorite: !prevState.isFavorite}));
+	}
 
 	useEffect(() => {
-		async function fetchEntities() {
-			const entities = await entityService.getEntities();
-			setEntities(entities);
-		}
-		fetchEntities();
+		// const intervalId = setInterval(() => {
+		// 	setIsFrontShown(prevState => !prevState);
+		// }, 10000)
+		// return () => {
+		// 	clearTimeout(intervalId);
+		// }
 	}, []);
 
-	const toggleModal = () => {
-		setIsAddModalOpen((isModalOpen) => !isModalOpen)
-	}
+	useEffect(() => {
+		queryClient.invalidateQueries({queryKey: ['pokemons']})
+	}, [filterValues]);
 
-	const HandleEntity = (entity:Entity) => {
-		toggleModal();
-		if (!entity.id) {
-			addEntity(entity)
-			return
-		}
-		editEntity(entity)
-	}
 
-	const addEntity = async (entity:Entity) => {
-		const addedEntity = await entityService.addEntity(entity);
-		setEntities((prevEntities) => {
-			return [...prevEntities, addedEntity]
-		})
-	}
-
-	const editEntity = async (entity:Entity) => {
-		const editedEntity = await entityService.editEntity(entity);
-		setEntities((prevEntities) => prevEntities.map(currEntity => currEntity.id === editedEntity.id ? editedEntity : currEntity))
-	}
-
-	const removeEntity = async (id:number) => {
-		await entityService.deleteEntity(id);
-		setEntities(prevEntities => {
-			return prevEntities.filter(entity => entity.id !== id);
-		})
-	}
+	if (isPending) return <div>...loading</div>;
+	if (error) return <div>ERROR</div>;
 
 	return (
-		<div className={'app'}>
-			<button onClick={toggleModal} className={'add-entity'}>
-				Add Entity
-			</button>
-			<EntitiesList onRemoveEntity={removeEntity} entities={entities} />
-			{isAddModalOpen && <EntityModal onSubmit={HandleEntity} onClose={toggleModal}/>}
+		<div className="app">
+			<AppHeader isShowFavs={filterValues.isFavorite} setIsShowFavs={toggleShowFavs} />
+			<PokemonList onClickCard={setChosenPokemon} isFrontShown={isFrontShown} pokemons={pokemons}/>
+			{chosenPokemon && <FullPokemonCard setPokemonFavorite={setPokemonFavorite} pokemon={chosenPokemon} setChosenPokemon={setChosenPokemon}/>}
 		</div>
 	);
 }
